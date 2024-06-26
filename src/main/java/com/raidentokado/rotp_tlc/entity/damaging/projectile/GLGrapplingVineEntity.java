@@ -33,7 +33,7 @@ public class GLGrapplingVineEntity extends OwnerBoundProjectileEntity {
     private boolean caughtAnEntity = false;
 
     public GLGrapplingVineEntity(World world, StandEntity entity, IStandPower userStand, boolean charg, LivingEntity suer) {
-        super(InitEntities.GL_VINE.get(), entity, world);
+        super(InitEntities.GL_GRAPPLING_VINE.get(), entity, world);
         this.stand = entity;
         this.userStandPower = userStand;
         this.ischarge = charg;

@@ -41,7 +41,7 @@ public class InitStands {
 
     public static final RegistryObject<StandEntityAction> GREEN_LANTERN_RECEIVING_SWORD = ACTIONS.register("green_lantern_receive_sword",
             () -> new GreenLanternReceivingSword(new StandEntityAction.Builder().staminaCost(1).autoSummonStand()
-                    .noResolveUnlock()
+                    .resolveLevelToUnlock(1)
                     .standSound(StandEntityAction.Phase.PERFORM, InitSounds.GREEN_LANTERN_RECEIVING)));
 
     public static final RegistryObject<StandEntityAction> GREEN_LANTERN_UNRECEIVING = ACTIONS.register("green_lantern_unreceive",
@@ -53,7 +53,7 @@ public class InitStands {
     public static final RegistryObject<StandEntityAction> GREEN_LANTERN_GRAPPLE = ACTIONS.register("green_lantern_grapple",
             () -> new GL_Grapple(new StandEntityAction.Builder().holdType()
                     .staminaCostTick(1).autoSummonStand().standUserWalkSpeed(1.0F)
-                    .resolveLevelToUnlock(1)
+                    .resolveLevelToUnlock(2)
                     .standSound(StandEntityAction.Phase.WINDUP, InitSounds.GREEN_LANTERN_GRAPPLE)));
     
     
@@ -73,9 +73,9 @@ public class InitStands {
                             GREEN_LANTERN_RECEIVING_SWORD.get()
                             )
                     .defaultStats(StandStats.class, new StandStats.Builder()
-                            .tier(6)
+                            .tier(7)
                             .power(20)
-                            .speed(20)
+                            .speed(15)
                             .range(50)
                             .durability(20)
                             .precision(20)

@@ -12,6 +12,7 @@ import net.minecraft.block.RedstoneLampBlock;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
@@ -25,7 +26,7 @@ public class GLVineEntity extends OwnerBoundProjectileEntity {
     private boolean isBinding;
     private boolean dealtDamage;
     private float knockback = 0;
-    private boolean ischarge;
+    private boolean spreed;
     private float baseHitPoints;
 
 
@@ -163,6 +164,19 @@ public class GLVineEntity extends OwnerBoundProjectileEntity {
     protected Vector3d originOffset(float yRot, float xRot, double distance) {
         return super.originOffset(yRot + yRotOffset, xRot + xRotOffset, distance);
     }
+
+    @Override
+    protected void addAdditionalSaveData(CompoundNBT nbt) {
+        super.addAdditionalSaveData(nbt);
+        nbt.putFloat("Points", baseHitPoints);
+    }
+
+    @Override
+    protected void readAdditionalSaveData(CompoundNBT nbt) {
+        super.readAdditionalSaveData(nbt);
+        baseHitPoints = nbt.getFloat("Points");
+    }
+
 
     @Override
     public void writeSpawnData(PacketBuffer buffer) {
