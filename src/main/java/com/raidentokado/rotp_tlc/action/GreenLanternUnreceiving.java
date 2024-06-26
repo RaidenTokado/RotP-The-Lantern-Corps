@@ -4,10 +4,10 @@ import com.github.standobyte.jojo.action.stand.StandEntityAction;
 import com.github.standobyte.jojo.entity.stand.StandEntity;
 import com.github.standobyte.jojo.entity.stand.StandEntityTask;
 import com.github.standobyte.jojo.power.impl.stand.IStandPower;
+import com.raidentokado.rotp_tlc.init.InitItems;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +22,7 @@ public class GreenLanternUnreceiving extends StandEntityAction {
             ItemStack item = player.inventory.getItem(i);
             Item type = item.getItem();
             if(!item.isEmpty()){
-                if(type == Items.SNOWBALL){
+                if(type == InitItems.GLSwordItem.get()){
                     itemStack= item;
                     itemStack.shrink(itemStack.getCount());
                 }
@@ -39,7 +39,7 @@ public class GreenLanternUnreceiving extends StandEntityAction {
                     ItemStack item = player.inventory.getItem(i);
                     Item type = item.getItem();
                     if(!item.isEmpty()){
-                        if(type == Items.SNOWBALL){
+                        if(type == InitItems.GLSwordItem.get()){
                             item.shrink(item.getCount());
                         }
 
