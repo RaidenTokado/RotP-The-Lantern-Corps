@@ -33,8 +33,8 @@ public class GreenLanternUnreceiving extends StandEntityAction {
     @Override
     public void standPerform(@NotNull World world, StandEntity standEntity, IStandPower userPower, StandEntityTask task){
         if(!world.isClientSide){
-            if(power.getUser() instanceof PlayerEntity){
-                PlayerEntity player = (PlayerEntity) power.getUser();
+            if(userPower.getUser() instanceof PlayerEntity){
+                PlayerEntity player = (PlayerEntity) userPower.getUser();
                 for(int i=0;i<player.inventory.getContainerSize();i++){
                     ItemStack item = player.inventory.getItem(i);
                     Item type = item.getItem();
