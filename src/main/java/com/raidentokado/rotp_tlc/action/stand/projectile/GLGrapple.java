@@ -6,13 +6,12 @@ import com.github.standobyte.jojo.entity.stand.StandEntity;
 import com.github.standobyte.jojo.entity.stand.StandEntityTask;
 import com.github.standobyte.jojo.power.impl.stand.IStandPower;
 import com.raidentokado.rotp_tlc.entity.damaging.projectile.GLGrapplingVineEntity;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.world.World;
 
-public class GL_Grapple extends StandEntityAction {
+public class GLGrapple extends StandEntityAction {
     private boolean hasEnt;
 
-    public GL_Grapple(StandEntityAction.Builder builder) {
+    public GLGrapple(StandEntityAction.Builder builder) {
         super(builder);
     }
 
@@ -21,9 +20,12 @@ public class GL_Grapple extends StandEntityAction {
     @Override
     public void standPerform(World world, StandEntity standEntity, IStandPower userPower, StandEntityTask task) {
         if (!world.isClientSide()) {
-            LivingEntity user = userPower.getUser();
-            GLGrapplingVineEntity vine = new GLGrapplingVineEntity(world, standEntity, userPower,false,user);
-            world.addFreshEntity(vine);
+            GLGrapplingVineEntity string = new GLGrapplingVineEntity(world, standEntity, userPower);
+            if (isShiftVariation()) {
+                string.setBindEntities(true);
+            }
+            string.withStandSkin(standEntity.getStandSkin());
+            world.addFreshEntity(string);
         }
     }
 

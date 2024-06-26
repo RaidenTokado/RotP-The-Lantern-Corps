@@ -12,7 +12,7 @@ import com.github.standobyte.jojo.power.impl.stand.type.StandType;
 import com.raidentokado.rotp_tlc.RotpTLCAddon;
 import com.raidentokado.rotp_tlc.action.GreenLanternReceivingSword;
 import com.raidentokado.rotp_tlc.action.GreenLanternUnreceiving;
-import com.raidentokado.rotp_tlc.action.stand.projectile.GL_Grapple;
+import com.raidentokado.rotp_tlc.action.stand.projectile.GLGrapple;
 import com.raidentokado.rotp_tlc.entity.stand.stands.GreenLanternEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -51,7 +51,7 @@ public class InitStands {
                     .shiftVariationOf(GREEN_LANTERN_RECEIVING_SWORD)));
 
     public static final RegistryObject<StandEntityAction> GREEN_LANTERN_GRAPPLE = ACTIONS.register("green_lantern_grapple",
-            () -> new GL_Grapple(new StandEntityAction.Builder().holdType()
+            () -> new GLGrapple(new StandEntityAction.Builder().holdType()
                     .staminaCostTick(1).autoSummonStand().standUserWalkSpeed(1.0F)
                     .resolveLevelToUnlock(2)
                     .standSound(StandEntityAction.Phase.WINDUP, InitSounds.GREEN_LANTERN_GRAPPLE)));
