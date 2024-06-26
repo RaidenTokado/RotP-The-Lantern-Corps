@@ -1,0 +1,16 @@
+{
+  "entity.rotp_tlc.green_lantern": "Green Lantern",
+  "stand.rotp_tlc.green_lantern": "Green Lantern",
+  "action.rotp_tlc.green_lantern_punch": "Punch",
+  "action.rotp_tlc.green_lantern_heavy_punch": "Heavy Punch",
+  "action.rotp_tlc.green_lantern_barrage": "Barrage",
+  "action.rotp_tlc.green_lantern_block": "Block",
+  "action.rotp_tlc.green_lantern_receive_sword": "Receive Sword",
+  "action.rotp_tlc.green_lantern_receive_pickaxe": "Receive Pickaxe",
+  "action.rotp_tlc.green_lantern_unreceive": "Unreceive item",
+  "action.rotp_tlc.green_lantern_grapple": "Grapple entity",
+  "rotp_tlc.subtitle.green_lantern_name": "\"Green Lantern\"",
+  "item.rotp_tlc.gl_sword": "Green Lantern's Sword",
+  "item.rotp_tlc.gl_pickaxe": "Green Lantern's Pickaxe",
+  "multiverse.story_part.dc": "DC Universe"
+}
