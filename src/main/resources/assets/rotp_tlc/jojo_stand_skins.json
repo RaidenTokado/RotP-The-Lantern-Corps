@@ -1,0 +1,8 @@
+{
+  "skins": {
+    "rotp_tlc:classic": {
+      "stand_type": "rotp_tlc:green_lantern",
+      "color" : "0x00813a"
+    }
+  }
+}

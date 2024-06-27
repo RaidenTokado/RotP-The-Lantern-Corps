@@ -1,9 +1,17 @@
 package com.raidentokado.rotp_tlc.entity.damaging.projectile;
 
 import com.github.standobyte.jojo.JojoModConfig;
+import com.github.standobyte.jojo.entity.HamonBlockChargeEntity;
 import com.github.standobyte.jojo.entity.damaging.projectile.ownerbound.OwnerBoundProjectileEntity;
 import com.github.standobyte.jojo.entity.stand.StandEntity;
+import com.github.standobyte.jojo.init.ModParticles;
+import com.github.standobyte.jojo.init.ModStatusEffects;
+import com.github.standobyte.jojo.init.power.non_stand.ModPowers;
+import com.github.standobyte.jojo.init.power.non_stand.hamon.ModHamonSkills;
+import com.github.standobyte.jojo.power.impl.nonstand.INonStandPower;
+import com.github.standobyte.jojo.power.impl.nonstand.type.hamon.HamonData;
 import com.github.standobyte.jojo.util.mc.damage.DamageUtil;
+import com.github.standobyte.jojo.util.mod.JojoModUtil;
 import com.raidentokado.rotp_tlc.init.InitEntities;
 import com.raidentokado.rotp_tlc.init.InitSounds;
 import net.minecraft.block.BlockState;
@@ -14,11 +22,12 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.EntityRayTraceResult;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
+
+import java.util.Optional;
 
 public class GLVineEntity extends OwnerBoundProjectileEntity {
     private float yRotOffset;
@@ -26,8 +35,16 @@ public class GLVineEntity extends OwnerBoundProjectileEntity {
     private boolean isBinding;
     private boolean dealtDamage;
     private float knockback = 0;
+    private float hamonDamage;
+    private float hamonDamageCost;
+    private boolean spendHamonStability;
+    private boolean ischarge;
     private boolean spreed;
+    private boolean ishamonstu;
     private float baseHitPoints;
+    private boolean gaveHamonPointsForBaseHit = false;
+    private boolean scarlet;
+    private float hamomlevel;
 
 
     public GLVineEntity(World world, LivingEntity entity, float angleXZ, float angleYZ, boolean isBinding) {
@@ -70,6 +87,19 @@ public class GLVineEntity extends OwnerBoundProjectileEntity {
 
     @Override
     protected boolean hurtTarget(Entity target, LivingEntity owner) {
+        if(scarlet){
+            DamageUtil.dealDamageAndSetOnFire(target,
+                    entity -> DamageUtil.dealHamonDamage(entity, hamonDamage, this.getOwner() , null, attack -> attack.hamonParticle(ModParticles.HAMON_SPARK_RED.get())),
+                    MathHelper.floor(2 + 8F *  hamomlevel / (float) HamonData.MAX_STAT_LEVEL * hamonDamageCost), false);
+        } else if(ischarge){
+            DamageUtil.dealHamonDamage(target, hamonDamage, this.getOwner() , null, attack -> attack.hamonParticle(ModParticles.HAMON_SPARK.get()));
+        }
+        if(spreed){
+            if(target instanceof LivingEntity){
+                LivingEntity liv = (LivingEntity) target;
+                liv.addEffect(new EffectInstance(ModStatusEffects.HAMON_SPREAD.get(),100));
+            }
+        }
         return !dealtDamage ? super.hurtTarget(target, owner) : false;
     }
 
@@ -88,6 +118,19 @@ public class GLVineEntity extends OwnerBoundProjectileEntity {
             if (isBinding) {
                 if (target instanceof LivingEntity) {
                     LivingEntity livingTarget = (LivingEntity) target;
+
+
+                    if (!JojoModUtil.isTargetBlocking(livingTarget)) {
+                        attachToEntity(livingTarget);
+                        if(ishamonstu){
+                            livingTarget.addEffect(new EffectInstance(ModStatusEffects.HAMON_SHOCK.get(), ticksLifespan() - tickCount));
+                        }else {
+                            livingTarget.addEffect(new EffectInstance(ModStatusEffects.STUN.get(), ticksLifespan() - tickCount));
+
+                        }
+
+
+                    }
                 }
             }
             else {
@@ -116,6 +159,19 @@ public class GLVineEntity extends OwnerBoundProjectileEntity {
                     user = ((StandEntity) this.getOwner()).getUser();
                 }
                 LivingEntity finalUser = user;
+                INonStandPower.getNonStandPowerOptional(user).ifPresent(ipower->{
+                    Optional<HamonData> hamonOp = ipower.getTypeSpecificData(ModPowers.HAMON.get());
+                    if(hamonOp.isPresent()){
+                        HamonData hamon = hamonOp.get();
+                        if(hamon.isSkillLearned(ModHamonSkills.METAL_SILVER_OVERDRIVE.get())){
+                            level.getEntitiesOfClass(HamonBlockChargeEntity.class,
+                                    new AxisAlignedBB(Vector3d.atCenterOf(blockPos), Vector3d.atCenterOf(blockPos))).forEach(Entity::remove);
+                            HamonBlockChargeEntity charge = new HamonBlockChargeEntity(level, blockRayTraceResult.getBlockPos());
+                            charge.setCharge(0.02F * hamon.getHamonDamageMultiplier() * 60, 200, finalUser, 200F);
+                            level.addFreshEntity(charge);
+                        }
+                    }
+                });
             }
 
         }
@@ -168,12 +224,20 @@ public class GLVineEntity extends OwnerBoundProjectileEntity {
     @Override
     protected void addAdditionalSaveData(CompoundNBT nbt) {
         super.addAdditionalSaveData(nbt);
+        nbt.putFloat("HamonDamage", hamonDamage);
+        nbt.putFloat("HamonDamageCost", hamonDamageCost);
+        nbt.putBoolean("SpendStab", spendHamonStability);
+        nbt.putBoolean("PointsGiven", gaveHamonPointsForBaseHit);
         nbt.putFloat("Points", baseHitPoints);
     }
 
     @Override
     protected void readAdditionalSaveData(CompoundNBT nbt) {
         super.readAdditionalSaveData(nbt);
+        hamonDamage = nbt.getFloat("HamonDamage");
+        hamonDamageCost = nbt.getFloat("HamonDamageCost");
+        spendHamonStability = nbt.getBoolean("SpendStab");
+        gaveHamonPointsForBaseHit = nbt.getBoolean("PointsGiven");
         baseHitPoints = nbt.getFloat("Points");
     }
 
@@ -196,9 +260,33 @@ public class GLVineEntity extends OwnerBoundProjectileEntity {
     }
 
 
+    public void isCharged(boolean charg){
+        this.ischarge=charg;
+    }
+
+    public void isScarlet(boolean scarlet, float hamonlvl){
+        this.scarlet=scarlet;
+        this.hamomlevel=hamonlvl;
+    }
+    public void hamonStuned(boolean stun){
+        this.ishamonstu =stun;
+    }
+
+
+    public GLVineEntity setHamonDamageOnHit(float damage, float hitCost, boolean useBreathStab){
+        this.hamonDamage = damage;
+        this.hamonDamageCost = hitCost;
+        this.spendHamonStability = useBreathStab;
+        return this;
+    }
+
     public GLVineEntity setBaseUsageStatPoints (float points){
         this.baseHitPoints = points;
         return this;
+    }
+
+    public void isSpread(boolean spred){
+        this.spreed = spred;
     }
 
 }

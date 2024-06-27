@@ -2,7 +2,6 @@ package com.raidentokado.rotp_tlc.init;
 
 import com.github.standobyte.jojo.action.Action;
 import com.github.standobyte.jojo.action.stand.StandEntityAction;
-import com.github.standobyte.jojo.action.stand.StandEntityBlock;
 import com.github.standobyte.jojo.action.stand.StandEntityLightAttack;
 import com.github.standobyte.jojo.entity.stand.StandEntityType;
 import com.github.standobyte.jojo.init.power.stand.EntityStandRegistryObject;
@@ -13,6 +12,7 @@ import com.raidentokado.rotp_tlc.RotpTLCAddon;
 import com.raidentokado.rotp_tlc.action.GreenLanternReceivingSword;
 import com.raidentokado.rotp_tlc.action.GreenLanternUnreceiving;
 import com.raidentokado.rotp_tlc.action.stand.projectile.GLGrapple;
+import com.raidentokado.rotp_tlc.action.stand.projectile.GLShield;
 import com.raidentokado.rotp_tlc.entity.stand.stands.GreenLanternEntity;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
@@ -37,7 +37,8 @@ public class InitStands {
                     .standSound(StandEntityAction.Phase.WINDUP, InitSounds.UGl_PUNCH)));
 
     public static final RegistryObject<StandEntityAction> GREEN_LANTERN_BLOCK = ACTIONS.register("green_lantern_block",
-            () -> new StandEntityBlock());
+            () -> new GLShield(new StandEntityAction.Builder().holdType()
+                    .standSound(InitSounds.GREEN_LANTERN_BLOCK)));
 
     public static final RegistryObject<StandEntityAction> GREEN_LANTERN_RECEIVING_SWORD = ACTIONS.register("green_lantern_receive_sword",
             () -> new GreenLanternReceivingSword(new StandEntityAction.Builder().staminaCost(1).autoSummonStand()
@@ -55,6 +56,12 @@ public class InitStands {
                     .staminaCostTick(1).autoSummonStand().standUserWalkSpeed(1.0F)
                     .resolveLevelToUnlock(2)
                     .standSound(StandEntityAction.Phase.WINDUP, InitSounds.GREEN_LANTERN_GRAPPLE)));
+    public static final RegistryObject<StandEntityAction> GREEN_LANTERN_GRAPPLE_ENTITY = ACTIONS.register("green_lantern_grapple_entity",
+            () -> new GLGrapple(new StandEntityAction.Builder().holdType()
+                    .staminaCostTick(1).autoSummonStand().standUserWalkSpeed(1.0F)
+                    .resolveLevelToUnlock(2)
+                    .standSound(StandEntityAction.Phase.WINDUP, InitSounds.GREEN_LANTERN_GRAPPLE)
+                    .shiftVariationOf(GREEN_LANTERN_GRAPPLE)));
     
     
 
@@ -65,20 +72,20 @@ public class InitStands {
                     .color(0x00813a)
                     .storyPartName(PART_DC_NAME)
                     .leftClickHotbar(
-                            GREEN_LANTERN_PUNCH.get(),
-                            GREEN_LANTERN_GRAPPLE.get()
+                            GREEN_LANTERN_PUNCH.get()
                             )
                     .rightClickHotbar(
                             GREEN_LANTERN_BLOCK.get(),
-                            GREEN_LANTERN_RECEIVING_SWORD.get()
+                            GREEN_LANTERN_RECEIVING_SWORD.get(),
+                            GREEN_LANTERN_GRAPPLE.get()
                             )
                     .defaultStats(StandStats.class, new StandStats.Builder()
-                            .tier(7)
+                            .tier(6)
                             .power(20)
                             .speed(15)
-                            .range(50)
+                            .range(10)
                             .durability(20)
-                            .precision(20)
+                            .precision(5)
                             .build())
                     .addOst(InitSounds.GREEN_LANTERN_OST)
                     .build(),
