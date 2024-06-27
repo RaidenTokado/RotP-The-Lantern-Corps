@@ -2,33 +2,23 @@ package com.raidentokado.rotp_tlc.entity.stand.stands;
 
 
 import com.github.standobyte.jojo.entity.stand.StandEntity;
-import com.github.standobyte.jojo.entity.stand.StandRelativeOffset;
 import com.github.standobyte.jojo.entity.stand.StandEntityType;
-
+import com.github.standobyte.jojo.entity.stand.StandRelativeOffset;
 import com.github.standobyte.jojo.power.impl.stand.IStandPower;
 import com.github.standobyte.jojo.util.mod.JojoModUtil;
 import com.raidentokado.rotp_tlc.init.InitSounds;
 import com.raidentokado.rotp_tlc.init.InitTags;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.FlowingFluidBlock;
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.Direction;
 import net.minecraft.util.EntityPredicates;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceContext;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.shapes.ISelectionContext;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.BlockSnapshot;
-import net.minecraftforge.event.ForgeEventFactory;
 
 import java.util.List;
 import java.util.Objects;
@@ -40,18 +30,27 @@ public class GreenLanternEntity extends StandEntity {
         super(type, world);
         unsummonOffset = getDefaultOffsetFromUser().copy();
     }
-
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        entityData.define(REFLECT, false);
-
+    public void onRemovedFromWorld() {
+        super.onRemovedFromWorld();
+        LivingEntity user = getUser();
+        if (user instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) user;
+            player.abilities.mayfly = player.abilities.instabuild;
+        }
     }
+
     private final StandRelativeOffset offsetDefault = StandRelativeOffset.withYOffset(0, 0, 0);
 
     @Override
     public void tick() {
         super.tick();
+        LivingEntity user = getUser();
+        if (user instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) user;
+            player.abilities.mayfly = true;
+            flyingSpeed = 100;
+        }
 
         IStandPower.getStandPowerOptional(this.getUser()).ifPresent(power -> {
 
@@ -90,6 +89,12 @@ public class GreenLanternEntity extends StandEntity {
                 }
             }
         });
+    }
+    @Override
+    protected void defineSynchedData() {
+        super.defineSynchedData();
+        entityData.define(REFLECT, false);
+
     }
 
 

@@ -3,17 +3,13 @@ package com.raidentokado.rotp_tlc.entity.damaging.projectile;
 import com.github.standobyte.jojo.entity.damaging.projectile.ownerbound.OwnerBoundProjectileEntity;
 import com.github.standobyte.jojo.entity.stand.StandEntity;
 import com.github.standobyte.jojo.power.impl.stand.IStandPower;
-import com.github.standobyte.jojo.util.mc.damage.DamageUtil;
 import com.github.standobyte.jojo.util.mod.JojoModUtil;
 import com.raidentokado.rotp_tlc.init.InitEntities;
 import com.raidentokado.rotp_tlc.init.InitSounds;
 import com.raidentokado.rotp_tlc.init.InitStands;
-import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.*;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.world.World;
 
@@ -25,11 +21,7 @@ public class GLGrapplingVineEntity extends OwnerBoundProjectileEntity {
     private IStandPower userStandPower;
     private boolean bindEntities;
     private StandEntity stand;
-    private boolean ischarge;
-    int n;
-    private UUID userU;
-
-
+    private boolean placedBarrier = false;
     private boolean caughtAnEntity = false;
 
     public GLGrapplingVineEntity(World world, StandEntity entity, IStandPower userStand) {
@@ -43,8 +35,8 @@ public class GLGrapplingVineEntity extends OwnerBoundProjectileEntity {
     }
 
     @Override
-    public void remove() {
-        super.remove();
+    public void onRemovedFromWorld() {
+        super.onRemovedFromWorld();
         if (!level.isClientSide() && stand != null && caughtAnEntity) {
             stand.getManualMovementLocks().removeLock(MANUAL_MOVEMENT_LOCK);
         }
@@ -64,40 +56,30 @@ public class GLGrapplingVineEntity extends OwnerBoundProjectileEntity {
         LivingEntity bound = getEntityAttachedTo();
         if (bound != null) {
             LivingEntity owner = getOwner();
-            if(owner != null){
-                if(this.ischarge){
-                    DamageUtil.dealHamonDamage(bound, 0.15F, this, owner);
+            if (!bound.isAlive()) {
+                if (!level.isClientSide()) {
+                    remove();
                 }
-                if (!bound.isAlive()) {
+            }
+            else {
+                Vector3d vecToOwner = owner.position().subtract(bound.position());
+                double length = vecToOwner.length();
+                if (length < 2) {
                     if (!level.isClientSide()) {
                         remove();
                     }
                 }
                 else {
-                    Vector3d vecToOwner = owner.position().subtract(bound.position());
-
-                    double length = vecToOwner.length();
-                    if (length < 2) {
-                        if (!level.isClientSide()) {
-                            remove();
-                        }
-                    }
-                    else {
-                        dragTarget(bound, vecToOwner.normalize().scale(1));
-                        bound.fallDistance = 0;
-                    }
+                    dragTarget(bound, vecToOwner.normalize().scale(1));
+                    bound.fallDistance = 0;
                 }
-            }else {
-                this.remove();
             }
-
         }
     }
 
     public void setBindEntities(boolean bindEntities) {
         this.bindEntities = bindEntities;
     }
-
 
     @Override
     protected boolean moveToBlockAttached() {
@@ -133,7 +115,7 @@ public class GLGrapplingVineEntity extends OwnerBoundProjectileEntity {
         return true;
     }
 
-    private static final Vector3d OFFSET = new Vector3d(-0.3, -0.2, 0.75);
+    private static final Vector3d OFFSET = new Vector3d(-0.3, -0.2, 0.55);
     @Override
     protected Vector3d getOwnerRelativeOffset() {
         return OFFSET;
@@ -141,7 +123,7 @@ public class GLGrapplingVineEntity extends OwnerBoundProjectileEntity {
 
     @Override
     public int ticksLifespan() {
-        return getEntityAttachedTo() == null && !getBlockPosAttachedTo().isPresent() ? 20 : Integer.MAX_VALUE;
+        return getEntityAttachedTo() == null && !getBlockPosAttachedTo().isPresent() ? 40 : Integer.MAX_VALUE;
     }
 
     @Override
@@ -168,11 +150,9 @@ public class GLGrapplingVineEntity extends OwnerBoundProjectileEntity {
             if (target instanceof LivingEntity) {
                 LivingEntity livingTarget = (LivingEntity) target;
                 if (!JojoModUtil.isTargetBlocking(livingTarget)) {
-                    attachToEntity((LivingEntity) target);
-                    playSound(InitSounds.GREEN_LANTERN_GRAPPLE.get(), .5F, 1.0F);
+                    attachToEntity(livingTarget);
+                    playSound(InitSounds.GREEN_LANTERN_GRAPPLE_CATCH.get(), 1.0F, 1.0F);
                     caughtAnEntity = true;
-                    target.addTag(String.valueOf(userU));
-
                     return true;
                 }
             }
@@ -182,52 +162,6 @@ public class GLGrapplingVineEntity extends OwnerBoundProjectileEntity {
 
     @Override
     protected void updateMotionFlags() {}
-
-
-    private static final BlockState LAMP = Blocks.REDSTONE_LAMP.defaultBlockState().setValue(RedstoneLampBlock.LIT,true);
-    @Override
-    protected void afterBlockHit(BlockRayTraceResult blockRayTraceResult, boolean brokenBlock) {
-        if (!brokenBlock && !bindEntities) {
-            if (!getBlockPosAttachedTo().isPresent()) {
-                playSound(InitSounds.GREEN_LANTERN_GRAPPLE_CATCH.get(), 1.0F, 1.0F);
-                attachToBlockPos(blockRayTraceResult.getBlockPos());
-            }
-        }
-        if(!level.isClientSide){
-            if(level.getBlockState(blockRayTraceResult.getBlockPos()).getBlock()==Blocks.REDSTONE_LAMP &&
-                    !level.getBlockState(blockRayTraceResult.getBlockPos()).getBlockState().getValue(RedstoneLampBlock.LIT)
-            ){
-                level.setBlockAndUpdate(blockRayTraceResult.getBlockPos(),LAMP);
-            }
-        }
-        if(level.getBlockState(blockRayTraceResult.getBlockPos()).getBlock()==Blocks.IRON_BLOCK){
-            if(stand.getUser() != null){
-                BlockPos blockPos = blockRayTraceResult.getBlockPos();
-                LivingEntity user = stand.getUser();
-            }
-
-        }
-        if(!brokenBlock && bindEntities){
-            this.remove();
-        }
-    }
-
-
-    @Override
-    public void writeSpawnData(PacketBuffer buffer){
-        super.writeSpawnData(buffer);
-        buffer.writeUUID(userU);
-    }
-
-    @Override
-    public void readSpawnData(PacketBuffer additionalData) {
-        super.readSpawnData(additionalData);
-        this.userU = additionalData.readUUID();
-    }
-
-    public void isCharged(boolean charg){
-        this.ischarge=charg;
-    }
 
     @Override
     protected void defineSynchedData() {
