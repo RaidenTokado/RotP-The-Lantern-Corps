@@ -10,7 +10,7 @@ import com.github.standobyte.jojo.power.impl.stand.type.EntityStandType;
 import com.github.standobyte.jojo.power.impl.stand.type.StandType;
 import com.raidentokado.rotp_tlc.RotpTLCAddon;
 import com.raidentokado.rotp_tlc.action.GreenLanternReceivingSword;
-import com.raidentokado.rotp_tlc.action.GreenLanternUnreceiving;
+import com.raidentokado.rotp_tlc.action.GreenLanternUnreceivingSword;
 import com.raidentokado.rotp_tlc.action.stand.projectile.GLGrapple;
 import com.raidentokado.rotp_tlc.action.stand.projectile.GLShield;
 import com.raidentokado.rotp_tlc.entity.stand.stands.GreenLanternEntity;
@@ -37,8 +37,9 @@ public class InitStands {
                     .standSound(StandEntityAction.Phase.WINDUP, InitSounds.UGl_PUNCH)));
 
     public static final RegistryObject<StandEntityAction> GREEN_LANTERN_BLOCK = ACTIONS.register("green_lantern_block",
-            () -> new GLShield(new StandEntityAction.Builder().holdType()
-                    .standSound(InitSounds.GREEN_LANTERN_BLOCK)));
+            () -> new GLShield(new StandEntityAction.Builder().holdType().standSound(InitSounds.GREEN_LANTERN_BLOCK)
+                    .staminaCostTick(4)
+            ));
 
     public static final RegistryObject<StandEntityAction> GREEN_LANTERN_RECEIVING_SWORD = ACTIONS.register("green_lantern_receive_sword",
             () -> new GreenLanternReceivingSword(new StandEntityAction.Builder().staminaCost(1).autoSummonStand()
@@ -46,7 +47,7 @@ public class InitStands {
                     .standSound(StandEntityAction.Phase.PERFORM, InitSounds.GREEN_LANTERN_RECEIVING)));
 
     public static final RegistryObject<StandEntityAction> GREEN_LANTERN_UNRECEIVING = ACTIONS.register("green_lantern_unreceive",
-            () -> new GreenLanternUnreceiving(new StandEntityAction.Builder().staminaCost(1).autoSummonStand()
+            () -> new GreenLanternUnreceivingSword(new StandEntityAction.Builder().staminaCost(1).autoSummonStand()
                     .noResolveUnlock()
                     .standSound(StandEntityAction.Phase.PERFORM, InitSounds.GREEN_LANTERN_UNRECEIVING)
                     .shiftVariationOf(GREEN_LANTERN_RECEIVING_SWORD)));
@@ -76,8 +77,7 @@ public class InitStands {
                             )
                     .rightClickHotbar(
                             GREEN_LANTERN_BLOCK.get(),
-                            GREEN_LANTERN_RECEIVING_SWORD.get(),
-                            GREEN_LANTERN_GRAPPLE.get()
+                            GREEN_LANTERN_RECEIVING_SWORD.get()
                             )
                     .defaultStats(StandStats.class, new StandStats.Builder()
                             .tier(6)

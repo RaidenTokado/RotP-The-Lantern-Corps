@@ -11,9 +11,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
 
-public class GreenLanternUnreceiving extends StandEntityAction {
+public class GreenLanternUnreceivingSword extends StandEntityAction {
 
-    public GreenLanternUnreceiving(StandEntityAction.Builder builder) {
+    public GreenLanternUnreceivingSword(StandEntityAction.Builder builder) {
         super(builder);
     }
     public static ItemStack GLItemUnrec (@NotNull PlayerEntity player){

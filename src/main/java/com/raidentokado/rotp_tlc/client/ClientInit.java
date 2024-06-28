@@ -4,8 +4,10 @@ import com.github.standobyte.jojo.client.render.entity.layerrenderer.HamonBurnLa
 import com.raidentokado.rotp_tlc.RotpTLCAddon;
 import com.raidentokado.rotp_tlc.client.render.entity.model.stand.GreenLanternUserModel;
 import com.raidentokado.rotp_tlc.client.render.entity.renderer.GreenLanternLayer;
+import com.raidentokado.rotp_tlc.client.render.entity.renderer.damaging.projectile.GLShieldRenderer;
 import com.raidentokado.rotp_tlc.client.render.entity.renderer.stand.GreenLanternRenderer;
 import com.raidentokado.rotp_tlc.init.AddonStands;
+import com.raidentokado.rotp_tlc.init.InitEntities;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.LivingRenderer;
@@ -30,6 +32,7 @@ public class ClientInit {
         Minecraft mc = event.getMinecraftSupplier().get();;
 
         RenderingRegistry.registerEntityRenderingHandler(AddonStands.GREEN_LANTERN.getEntityType(), GreenLanternRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(InitEntities.GL_SHIELD.get(), GLShieldRenderer::new);
 
         event.enqueueWork(() -> {
             Map<String, PlayerRenderer> skinMap = mc.getEntityRenderDispatcher().getSkinMap();

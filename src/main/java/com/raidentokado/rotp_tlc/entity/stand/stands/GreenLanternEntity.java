@@ -49,8 +49,13 @@ public class GreenLanternEntity extends StandEntity {
         if (user instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) user;
             player.abilities.mayfly = true;
-            flyingSpeed = 100;
+
+            if (level.isClientSide()) {
+                float speed = 0.30f;
+                player.abilities.setFlyingSpeed(speed);
+            }
         }
+
 
         IStandPower.getStandPowerOptional(this.getUser()).ifPresent(power -> {
 
