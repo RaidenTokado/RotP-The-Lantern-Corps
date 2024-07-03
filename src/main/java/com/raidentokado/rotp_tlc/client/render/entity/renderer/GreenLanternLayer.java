@@ -64,7 +64,7 @@ public class GreenLanternLayer<T extends LivingEntity, M extends PlayerModel<T>>
                 if (shield) textureName += "_shield";
                 if (slim) textureName += "_slim";
                 ResourceLocation texture = new  ResourceLocation(RotpTLCAddon.MOD_ID,"/textures/entity/stand/" + textureName + ".png");
-                IVertexBuilder vertexBuilder = ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(texture), false, false);
+                IVertexBuilder vertexBuilder = ItemRenderer.getArmorFoilBuffer(buffer, RenderType.entityTranslucent(texture), false, false);
                 glovesModel.renderToBuffer(matrixStack, vertexBuilder, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
             }
 

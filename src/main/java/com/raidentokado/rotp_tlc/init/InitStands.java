@@ -48,7 +48,7 @@ public class InitStands {
 
     public static final RegistryObject<StandEntityAction> GREEN_LANTERN_UNRECEIVING = ACTIONS.register("green_lantern_unreceive",
             () -> new GreenLanternUnreceivingSword(new StandEntityAction.Builder().staminaCost(1).autoSummonStand()
-                    .noResolveUnlock()
+//                    .noResolveUnlock() // если его вызвать, абилка вообще не откроется, если вручную ее не разблокировать, это для абилок по типу раскрафта предметов на КД, которые открываются не от уровня резолва
                     .standSound(StandEntityAction.Phase.PERFORM, InitSounds.GREEN_LANTERN_UNRECEIVING)
                     .shiftVariationOf(GREEN_LANTERN_RECEIVING_SWORD)));
 
@@ -77,7 +77,8 @@ public class InitStands {
                             )
                     .rightClickHotbar(
                             GREEN_LANTERN_BLOCK.get(),
-                            GREEN_LANTERN_RECEIVING_SWORD.get()
+                            GREEN_LANTERN_RECEIVING_SWORD.get(),
+                            GREEN_LANTERN_GRAPPLE.get()
                             )
                     .defaultStats(StandStats.class, new StandStats.Builder()
                             .tier(6)
