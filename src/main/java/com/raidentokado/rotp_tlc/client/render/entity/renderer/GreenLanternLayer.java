@@ -48,7 +48,7 @@ public class GreenLanternLayer<T extends LivingEntity, M extends PlayerModel<T>>
 
         IStandPower.getStandPowerOptional(entity).ifPresent((stand)->{
             StandType<?>  hm = InitStands.STAND_GREEN_LANTERN.getStandType();
-            if(stand.getType() == hm && stand.getStandManifestation()instanceof StandEntity && stand.getHeldAction() != InitStands.GREEN_LANTERN_BLOCK.get()){
+            if(stand.getType() == hm && stand.getStandManifestation()instanceof StandEntity){
                 M playerModel = getParentModel();
                 glovesModel.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTick);
                 playerModel.copyPropertiesTo(glovesModel);
