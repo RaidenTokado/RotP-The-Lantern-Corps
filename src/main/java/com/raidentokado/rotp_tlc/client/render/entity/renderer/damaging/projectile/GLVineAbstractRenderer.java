@@ -10,6 +10,6 @@ import net.minecraft.util.ResourceLocation;
 public abstract class GLVineAbstractRenderer<T extends OwnerBoundProjectileEntity> extends ExtendingEntityRenderer<T, GLVineModel<T>> {
 
     public GLVineAbstractRenderer(EntityRendererManager renderManager, GLVineModel<T> model) {
-        super(renderManager, model, new ResourceLocation(RotpTLCAddon.MOD_ID, "textures/entity/projectiles/gl_vine.png"));
+        super(renderManager, model, new ResourceLocation(RotpTLCAddon.MOD_ID, "textures/entity/projectile/gl_vine.png"));
     }
 }

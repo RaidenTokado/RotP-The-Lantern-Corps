@@ -48,7 +48,7 @@ public class GreenLanternLayer<T extends LivingEntity, M extends PlayerModel<T>>
 
         IStandPower.getStandPowerOptional(entity).ifPresent((stand)->{
             StandType<?>  hm = InitStands.STAND_GREEN_LANTERN.getStandType();
-            if(stand.getType() == hm && stand.getStandManifestation()instanceof StandEntity && stand.getHeldAction() != InitStands.GREEN_LANTERN_BLOCK.get()){
+            if(stand.getType() == hm && stand.getStandManifestation()instanceof StandEntity){
                 M playerModel = getParentModel();
                 glovesModel.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTick);
                 playerModel.copyPropertiesTo(glovesModel);
@@ -58,8 +58,13 @@ public class GreenLanternLayer<T extends LivingEntity, M extends PlayerModel<T>>
                 glovesModel.leftSleeve.visible = playerModel.leftArm.visible;
                 glovesModel.rightArm.visible = playerModel.rightArm.visible;
                 glovesModel.rightSleeve.visible = playerModel.rightArm.visible;
-                ResourceLocation texture = new  ResourceLocation(RotpTLCAddon.MOD_ID,"/textures/entity/stand/green_lantern"+(slim ? "_slim" : "") + ".png");
-                IVertexBuilder vertexBuilder = ItemRenderer.getArmorFoilBuffer(buffer, RenderType.armorCutoutNoCull(texture), false, false);
+                
+                String textureName = "green_lantern";
+                boolean shield = stand.getHeldAction() == InitStands.GREEN_LANTERN_BLOCK.get(); // это если я правильно понял задумку с текстурой
+                if (shield) textureName += "_shield";
+                if (slim) textureName += "_slim";
+                ResourceLocation texture = new  ResourceLocation(RotpTLCAddon.MOD_ID,"/textures/entity/stand/" + textureName + ".png");
+                IVertexBuilder vertexBuilder = ItemRenderer.getArmorFoilBuffer(buffer, RenderType.entityTranslucent(texture), false, false);
                 glovesModel.renderToBuffer(matrixStack, vertexBuilder, packedLight, OverlayTexture.NO_OVERLAY, 1, 1, 1, 1);
             }
 

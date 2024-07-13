@@ -8,9 +8,11 @@
   "action.rotp_tlc.green_lantern_receive_sword": "Receive Sword",
   "action.rotp_tlc.green_lantern_receive_pickaxe": "Receive Pickaxe",
   "action.rotp_tlc.green_lantern_unreceive": "Unreceive item",
-  "action.rotp_tlc.green_lantern_grapple": "Grapple entity",
+  "action.rotp_tlc.green_lantern_grapple": "Grapple",
+  "action.rotp_tlc.green_lantern_grapple_entity": "Grapple entity",
   "rotp_tlc.subtitle.green_lantern_name": "\"Green Lantern\"",
   "item.rotp_tlc.gl_sword": "Green Lantern's Sword",
   "item.rotp_tlc.gl_pickaxe": "Green Lantern's Pickaxe",
+  "block.rotp_tlc.lantern_box": "Box with a Power Ring",
   "multiverse.story_part.dc": "DC Universe"
 }
