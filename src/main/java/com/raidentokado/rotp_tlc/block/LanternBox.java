@@ -15,7 +15,6 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockRayTraceResult;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
@@ -53,11 +52,6 @@ public class LanternBox extends Block {
     @Override
     public boolean dropFromExplosion(Explosion explosion) {
         return false;
-    }
-
-    @Override
-    protected int xpOnDrop(Random rand) {
-        return MathHelper.nextInt(rand, 6, 10);
     }
 
     @Override
