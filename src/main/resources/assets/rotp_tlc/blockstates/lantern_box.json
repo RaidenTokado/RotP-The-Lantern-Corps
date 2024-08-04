@@ -1,5 +1,8 @@
 {
   "variants": {
-    "": { "model": "rotp_tlc:block/lantern_box" }
+    "facing=north": { "model": "rotp_tlc:block/lantern_box", "y": 180 },
+    "facing=east": { "model": "rotp_tlc:block/lantern_box", "y": 270 },
+    "facing=south": { "model": "rotp_tlc:block/lantern_box" },
+    "facing=west": { "model": "rotp_tlc:block/lantern_box", "y": 90 }
   }
 }
