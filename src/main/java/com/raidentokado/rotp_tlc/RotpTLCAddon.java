@@ -22,6 +22,7 @@ public class RotpTLCAddon {
         InitStands.STANDS.register(modEventBus);
         InitParticles.PARTICLES.register(modEventBus);
         InitItems.ITEMS.register(modEventBus);
+        InitBlocks.BLOCKS.register(modEventBus);
 
 
         InitTags.iniTags();

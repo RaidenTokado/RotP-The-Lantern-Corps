@@ -18,14 +18,10 @@ public class InitSounds {
             ()-> new SoundEvent(new ResourceLocation(RotpTLCAddon.MOD_ID,"gl_punch")));
     public static final Supplier<SoundEvent> UGl_PUNCH = SOUNDS.register("ugl_punch",
             ()-> new SoundEvent(new ResourceLocation(RotpTLCAddon.MOD_ID,"ugl_punch")));
-    public static final Supplier<SoundEvent> GREEN_LANTERN_PUNCH_HEAVY = SOUNDS.register("gl_heavy_punch",
-            ()-> new SoundEvent(new ResourceLocation(RotpTLCAddon.MOD_ID,"gl_heavy_punch")));
     public static final Supplier<SoundEvent> GREEN_LANTERN_RECEIVING = SOUNDS.register("gl_receiving",
             ()-> new SoundEvent(new ResourceLocation(RotpTLCAddon.MOD_ID,"gl_receiving")));
     public static final Supplier<SoundEvent> GREEN_LANTERN_UNRECEIVING = SOUNDS.register("gl_unreceiving",
             ()-> new SoundEvent(new ResourceLocation(RotpTLCAddon.MOD_ID,"gl_unreceiving")));
-    public static final Supplier<SoundEvent> GREEN_LANTERN_FLIGHT = SOUNDS.register("gl_flight",
-            ()-> new SoundEvent(new ResourceLocation(RotpTLCAddon.MOD_ID,"gl_flight")));
     public static final Supplier<SoundEvent> GREEN_LANTERN_GRAPPLE = SOUNDS.register("gl_grapple",
             ()-> new SoundEvent(new ResourceLocation(RotpTLCAddon.MOD_ID,"gl_grapple")));
     public static final Supplier<SoundEvent> GREEN_LANTERN_GRAPPLE_CATCH = SOUNDS.register("gl_grapple_catch",

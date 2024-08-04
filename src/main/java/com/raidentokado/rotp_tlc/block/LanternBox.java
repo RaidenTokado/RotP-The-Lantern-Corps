@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Random;
 
 
-public class LanternBox extends Block {
+public class    LanternBox extends Block {
 
     public LanternBox(Properties properties) {
         super(properties);
