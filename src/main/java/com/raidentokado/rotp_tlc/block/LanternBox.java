@@ -94,28 +94,9 @@ public class LanternBox extends Block {
     @Nullable
     public BlockState getStateForPlacement(BlockItemUseContext context) {
         BlockPos blockpos = context.getClickedPos();
-        if (blockpos.getY() < 254) {
-            World world = context.getLevel();
-            Direction right = context.getHorizontalDirection().getClockWise();
-            for (int i = 0; i < 2; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if (!world.getBlockState(blockpos.above(j).relative(right, i)).canBeReplaced(context)) {
-                        return null;
-                    }
-                }
-            }
-            Direction left = context.getHorizontalDirection().getCounterClockWise();
-            for (int i = 0; i < 2; i++) {
-                for (int j = 0; j < 3; j++) {
-                    if (!world.getBlockState(blockpos.above(j).relative(left, i)).canBeReplaced(context)) {
-                        return null;
-                    }
-                }
-            }
             return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection());
-        }
-        return null;
     }
+
     @Override
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
         builder.add(FACING);
